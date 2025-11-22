@@ -24,6 +24,79 @@ public class TransactionDTO {
     private String txId;
     private String ipAddress;
 
+    public long getUid() {
+        return uid;
+    }
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+    public TransactionType getType() {
+        return type;
+    }
+    public void setType(TransactionType type) {
+        this.type = type;
+    }
+    public long getAmountKrw() {
+        return amountKrw;
+    }
+    public void setAmountKrw(long amountKrw) {
+        this.amountKrw = amountKrw;
+    }
+    public LocalDateTime getTransactedAt() {
+        return transactedAt;
+    }
+    public void setTransactedAt(LocalDateTime transactedAt) {
+        this.transactedAt = transactedAt;
+    }
+    public String getAssetSymbol() {
+        return assetSymbol;
+    }
+    public void setAssetSymbol(String assetSymbol) {
+        this.assetSymbol = assetSymbol;
+    }
+    public BigDecimal getAssetQuantity() {
+        return assetQuantity;
+    }
+    public void setAssetQuantity(BigDecimal assetQuantity) {
+        this.assetQuantity = assetQuantity;
+    }
+    public BigDecimal getQuotePriceKrw() {
+        return quotePriceKrw;
+    }
+    public void setQuotePriceKrw(BigDecimal quotePriceKrw) {
+        this.quotePriceKrw = quotePriceKrw;
+    }
+    public String getFromAddress() {
+        return fromAddress;
+    }
+    public void setFromAddress(String fromAddress) {
+        this.fromAddress = fromAddress;
+    }
+    public String getToAddress() {
+        return toAddress;
+    }
+    public void setToAddress(String toAddress) {
+        this.toAddress = toAddress;
+    }
+    public String getCountryCode() {
+        return countryCode;
+    }
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+    public String getTxId() {
+        return txId;
+    }
+    public void setTxId(String txId) {
+        this.txId = txId;
+    }
+    public String getIpAddress() {
+        return ipAddress;
+    }
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
 
 }
 
