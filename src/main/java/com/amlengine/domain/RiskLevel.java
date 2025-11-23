@@ -1,5 +1,7 @@
 package main.java.com.amlengine.domain;
 
-public class RiskLevel {
-    
+public enum RiskLevel {
+    LOW
+    ,MEDIUM
+    ,HIGH
 }

@@ -1,5 +1,7 @@
 package main.java.com.amlengine.domain;
 
-public class AlertStatus {
-    
+public enum AlertStatus {
+    PENDING
+    , IN_REVIEW
+    , CLOSED
 }

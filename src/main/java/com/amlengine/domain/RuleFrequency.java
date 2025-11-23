@@ -1,5 +1,7 @@
 package main.java.com.amlengine.domain;
 
-public class RuleFrequency {
-    
+public enum RuleFrequency {
+    REALTIME
+    , HOURLY
+    , DAILY 
 }
