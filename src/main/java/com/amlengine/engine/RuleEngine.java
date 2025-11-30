@@ -28,6 +28,7 @@ public class RuleEngine {
         String alertId = rule.getRuleName() + ":" + tx.getTxId();
         String mainTxId = tx.getTxId();
         List<String> relatedTxIds = List.of(tx.getTxId());
+        String ruleId = rule.getRuleId();
         String ruleName = rule.getRuleName();
         String ruleDescription = rule.getRuleDescription();
         RuleFrequency frequency = rule.getFrequency();
@@ -40,6 +41,7 @@ public class RuleEngine {
         alert.setAlertId(alertId);
         alert.setMainTxId(mainTxId);
         alert.setRelatedTxIds(relatedTxIds);
+        alert.setRuleName(ruleId);
         alert.setRuleName(ruleName);
         alert.setRuleDescription(ruleDescription);
         alert.setFrequency(frequency);

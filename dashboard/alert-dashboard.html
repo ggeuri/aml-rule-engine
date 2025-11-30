@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>AML Alert Dashboard</title>
+  <style>
+    body { margin:0; font-family: system-ui, sans-serif; }
+
+    .container { 
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        background-color: white;
+    }
+
+
+    
+    h1{
+    padding-left: 10px;
+    }
+
+    
+    .content{
+        display: flex;
+        flex: 1;
+    }
+    .list{ 
+        flex: 1.2;
+        background-color: rgb(255, 255, 255);
+        border-right:1px solid #ddd; 
+        padding-left: 10px;
+        box-sizing:border-box;
+    }
+    .list h2{
+        padding-top: 10px;
+        border-top: 1px solid #ddd;}
+    
+    table {width: 100%; border-collapse: collapse; font-size: 13px; border: 1px;}
+    th, td { border-bottom: 1px solid #000000; padding: 6px 8px; }
+    tr:hover { cursor: pointer; }
+
+    .risk-HIGH { color: red; font-weight: bold; }
+    .risk-MEDIUM { color: #ffb472; }
+    .risk-LOW { color: #eeffb0; }                       
+    
+
+    .detail{
+        flex:1;
+        background-color: rgb(0, 0, 0);
+        color: white;
+        padding-left: 10px;
+        box-sizing:border-box; 
+    }
+
+
+
+
+  </style>
+</head>
+<body>
+  <div class="container">
+      
+      <div class="content">
+          <div class="list">
+          <h1>AML Alert Dashboard</h1>
+          <h2>Alert List</h2>
+
+          <table >
+            <thead>
+                <tr>
+                    <th>Rule ID</th>
+                    <th>Rule 설명</th>
+                    <th>UID</th>
+                    <th>AmountKrw</th>
+                    <th>Risk</th>
+                    <th>Reviewer</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="alert-table-body">
+            </tbody>
+          </table>
+      </div>
+      <div class="detail" id="alert-detail">
+          <h2>Alert 상세</h2>
+      </div>
+    </div>
+  </div>
+  <script>
+  const alerts = [
+    {
+      alertId: "IO-003: RapidWithdrawRule:KRWWDR_003",
+      mainTxId: "KRWWDR_003",
+      uid: 1001,
+      ruleId: "IO-003",
+      ruleName: "RapidWithdrawRule",
+      ruleDescription: "단기간 반복 출금 거래 탐지",
+      riskLevel: "MEDIUM",
+      status: "ASSIGNED",
+      reviewer: "analyst1",
+      detectedAt: "2025-01-01T10:09:00",
+      countryCode: "KR",
+      type: "KRW_WITHDRAW",
+      amountKrw: 100000
+    },
+    {
+      alertId: "CU-001: ForeignCountryRule:ETHWDR_SG_001",
+      mainTxId: "ETHWDR_SG_001",
+      uid: 1004,
+      ruleId: "CU-001",
+      ruleName: "ForeignCountryRule",
+      ruleDescription: "해외 국가 코드에서 발생하는 출금 거래 탐지",
+      riskLevel: "HIGH",
+      status: "PENDING",
+      reviewer: null,
+      detectedAt: "2025-01-01T13:00:00",
+      countryCode: "SG",
+      type: "COIN_WITHDRAW",
+      amountKrw: 4500000
+    }
+  ];
+
+let tbody = document.getElementById("alert-table-body");
+let detail = document.getElementById("alert-detail");
+
+alerts.forEach(function(alert, i) {
+    let tr = document.createElement("tr");
+
+    tr.innerHTML = `
+    <td>${alert.ruleId}</td>  
+    <td>${alert.ruleDescription}</td>  
+    <td>${alert.uid}</td>  
+    <td>${alert.amountKrw.toLocaleString()}</td>  
+    <td class = "risk-${alert.riskLevel}">${alert.riskLevel}</td>  
+    <td>${alert.reviewer ? alert.reviewer : '미배정'}</td>
+    <td>${alert.status}</td>  
+    ` ;
+
+    tr.onclick = function() {
+        detail.innerHTML = `
+        <h2>${alert.ruleId} : ${alert.ruleDescription}</h2>
+        <p><b>detectedAt</b> : ${alert.detectedAt}</p>
+        <p><b>UID</b> : ${alert.uid}</p>
+        <p><b>Type</b> : ${alert.type}</p>
+        <p><b>amountKrw</b> : ${alert.amountKrw.toLocaleString()}</p>
+        <p><b>status</b> : ${alert.status}</p>
+        <p><b>Reviewer</b> : ${alert.reviewer ? alert.reviewer : '미배정'}</p>
+        <p><b>TxId</b> : ${alert.mainTxId}</p>
+        <p><b>riskLevel</b> : ${alert.riskLevel}</p>
+        <p><b>countryCode</b> : ${alert.countryCode}</p>
+        `
+
+    }
+
+tbody.appendChild(tr);
+
+  if (i === 0) {
+      tr.click();
+    }
+
+});
+
+
+
+
+
+</script>
+</body>
+</html>

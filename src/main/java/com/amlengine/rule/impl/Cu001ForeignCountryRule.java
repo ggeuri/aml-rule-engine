@@ -10,8 +10,14 @@ import main.java.com.amlengine.rule.Rule;
 
 public class Cu001ForeignCountryRule implements Rule{
 
-    private static final String RULE_NAME = "CU-001: ForeignCountryRule";
+    private static final String RULE_ID = "CU-001";
+    private static final String RULE_NAME = "ForeignCountryRule";
 
+    @Override
+    public String getRuleId() {
+        return RULE_ID;
+    };
+    
     @Override
     public String getRuleName() {
         return RULE_NAME;

@@ -4,10 +4,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class AlertDTO {
-
+    
     private String alertId;
     private String mainTxId;
     private List<String> relatedTxIds;
+    private String ruleId;
     private String ruleName;
     private String ruleDescription;
     private RuleFrequency frequency;
@@ -34,6 +35,12 @@ public class AlertDTO {
     }
     public void setRelatedTxIds(List<String> relatedTxIds) {
         this.relatedTxIds = relatedTxIds;
+    }
+    public String getRuleId() {
+        return ruleId;
+    }
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
     public String getRuleName() {
         return ruleName;

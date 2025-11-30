@@ -8,12 +8,12 @@ import main.java.com.amlengine.domain.AlertStatus;
 
 public class AlertAssignmentService {
 
-    public void assignRoundRobin(List<AlertDTO> alerts, List<String> reviewers ){
-        if(alerts == null || alerts.isEmpty()) return;
-        if(reviewers == null || reviewers.isEmpty()) return;
+    public int assignRoundRobin(List<AlertDTO> alerts, List<String> reviewers, int startIndex){
+        if(alerts == null || alerts.isEmpty()) return startIndex;
+        if(reviewers == null || reviewers.isEmpty()) return startIndex;
 
         int reviewerCount = reviewers.size();
-        int index = 0 ; 
+        int index = startIndex;
 
         for (AlertDTO alert : alerts) {
             if(alert.getStatus() != AlertStatus.PENDING) continue;
@@ -22,17 +22,11 @@ public class AlertAssignmentService {
             index++;
 
             alert.setReviewer(reviewer);
-            alert.setStatus(AlertStatus.IN_REVIEW);
-            alert.setReviewAssignedAt(LocalDateTime.now());
-
-            
+            alert.setStatus(AlertStatus.ASSIGNED);
+            alert.setReviewAssignedAt(LocalDateTime.now()); 
         }
 
-
-
+        return index;
     }
 
-
-
-    
 }
