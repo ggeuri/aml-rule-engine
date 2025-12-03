@@ -1,5 +1,8 @@
 package main.java.com.amlengine.rule.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import main.java.com.amlengine.domain.RiskLevel;
@@ -48,11 +51,36 @@ public class IO002HighAmountAfterDepositRule implements Rule{
         if(!TxTypeHelper.isWithdraw(tx.getType())) return false;
         
         long uid = tx.getUid();
-        // TODO: 기준 입금 찾고, windowMinutes 안의 출금 누적합 계산하기
-        // - config.getPercentThreshold()
-        // - config.getAbsoluteThresholdKrw()
-        // - config.getWindowMinutes()
-        return false;
+        LocalDateTime end = tx.getTransactedAt(); 
+        LocalDateTime start = end.minusMinutes(config.getWindowMinutes());
+        long sumDeposit = 0; 
+        long sumWithdraw = 0; 
+
+        for (TransactionDTO h : history) {
+            if(h == null) continue;
+            if(h.getUid() != uid) continue;
+
+            LocalDateTime t = h.getTransactedAt();
+            if (t.isBefore(start) || t.isAfter(end)) continue; 
+            
+            if(TxTypeHelper.isDeposit(h.getType())){
+                sumDeposit += h.getAmountKrw();
+            }
+    
+            if(TxTypeHelper.isWithdraw(h.getType())){
+                    sumWithdraw += h.getAmountKrw();
+            }
+            
+        }
+        
+        if (sumDeposit <= 0) return false;
+        if (sumWithdraw < config.getAbsoluteThresholdKrw()) return false;
+        BigDecimal withdraw = BigDecimal.valueOf(sumWithdraw);
+        BigDecimal deposit = BigDecimal.valueOf(sumDeposit);
+        
+        BigDecimal ratio = withdraw.divide(deposit, 8, RoundingMode.HALF_UP);
+
+        return ratio.compareTo(config.getPercentThreshold()) >= 0;
 
     };
 }

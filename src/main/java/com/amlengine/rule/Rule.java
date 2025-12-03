@@ -7,6 +7,7 @@ import main.java.com.amlengine.domain.RuleFrequency;
 import main.java.com.amlengine.domain.TransactionDTO;
 
 public interface Rule {
+    String getRuleId();
     String getRuleName();
     String getRuleDescription();
     RiskLevel getRiskLevel();

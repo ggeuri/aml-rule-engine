@@ -11,7 +11,8 @@ import main.java.com.amlengine.rule.Rule;
 import main.java.com.amlengine.rule.config.RapidWithdrawRuleConfig;
 
 public class IO003RapidWithdrawRule implements Rule{
-    private static final String RULE_NAME = "IO-003: Rapid Withdraw" ;
+    private static final String RULE_ID = "IO-003" ;
+    private static final String RULE_NAME = "Rapid Withdraw" ;
     // (windowMinutes, count)를 외부에서 주입받기 위한 설정 객체
     private final RapidWithdrawRuleConfig config;
     
@@ -22,6 +23,10 @@ public class IO003RapidWithdrawRule implements Rule{
     this.config = config;
     }
 
+    @Override
+     public String getRuleId(){
+        return RULE_ID;
+    }
     @Override
      public String getRuleName(){
         return RULE_NAME;

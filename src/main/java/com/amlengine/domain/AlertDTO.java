@@ -90,8 +90,5 @@ public class AlertDTO {
     public void setReviewAssignedAt(LocalDateTime reviewAssignedAt) {
         this.reviewAssignedAt = reviewAssignedAt;
     }
-
-
-
     
 }

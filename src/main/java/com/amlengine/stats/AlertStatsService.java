@@ -17,11 +17,11 @@ public Map<String, Long> countByRule(List<AlertDTO> alerts){
 
     for (AlertDTO alert : alerts) {
         if(alert == null) continue; 
-        String ruleName = alert.getRuleName();
-        if(ruleName == null) continue; 
+        String ruleId = alert.getRuleId();
+        if(ruleId == null) continue; 
 
-        long count = resultByRule.getOrDefault(ruleName, 0L); 
-        resultByRule.put(ruleName,count+1);
+        long count = resultByRule.getOrDefault(ruleId, 0L); 
+        resultByRule.put(ruleId,count+1);
     }
 
     return resultByRule; 

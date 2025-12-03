@@ -20,12 +20,12 @@ public class RuleEngine {
 
     public RuleEngine(List<Rule> rules){
         this.rules = rules;
-    };
+    }
     
     private AlertDTO createAlert(TransactionDTO tx, Rule rule){
         AlertDTO alert = new AlertDTO();
         
-        String alertId = rule.getRuleName() + ":" + tx.getTxId();
+        String alertId = rule.getRuleId() + ":" + tx.getTxId();
         String mainTxId = tx.getTxId();
         List<String> relatedTxIds = List.of(tx.getTxId());
         String ruleId = rule.getRuleId();
@@ -41,7 +41,7 @@ public class RuleEngine {
         alert.setAlertId(alertId);
         alert.setMainTxId(mainTxId);
         alert.setRelatedTxIds(relatedTxIds);
-        alert.setRuleName(ruleId);
+        alert.setRuleId(ruleId);
         alert.setRuleName(ruleName);
         alert.setRuleDescription(ruleDescription);
         alert.setFrequency(frequency);
@@ -66,7 +66,7 @@ public class RuleEngine {
             
             for (Rule rule : rules) {
                 if(!rule.match(tx, history)) continue; 
-                String key = rule.getRuleName()+":"+tx.getTxId();
+                String key = rule.getRuleId() + ":" + tx.getTxId();
                 if(alertKeys.contains(key)) continue; 
                 alertKeys.add(key);
                 AlertDTO alert = createAlert(tx, rule);
