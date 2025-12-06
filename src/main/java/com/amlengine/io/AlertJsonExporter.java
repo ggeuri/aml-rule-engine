@@ -56,6 +56,10 @@ public class AlertJsonExporter {
             alertJson.append("\"detectedAt\":\"").append(alert.getDetectedAt()).append("\",");
             alertJson.append("\"riskLevel\":\"").append(alert.getRiskLevel()).append("\",");
             alertJson.append("\"status\":\"").append(alert.getStatus()).append("\",");
+            alertJson.append("\"uid\":").append(alert.getUid()).append(",");
+            alertJson.append("\"amountKrw\":").append(alert.getAmountKrw()).append(",");
+            alertJson.append("\"type\":\"").append(alert.getType()).append("\",");
+            alertJson.append("\"countryCode\":\"").append(alert.getCountryCode()).append("\",");
 
             
             alertJson.append("\"reviewer\":");
@@ -65,6 +69,12 @@ public class AlertJsonExporter {
                 alertJson.append("\"").append(alert.getReviewer()).append("\",");
             }
 
+            alertJson.append("\"assetSymbol\":");
+            if (alert.getAssetSymbol() == null) {
+                alertJson.append("null,");
+            } else {
+                alertJson.append("\"").append(alert.getAssetSymbol()).append("\",");
+            }
             
             alertJson.append("\"reviewAssignedAt\":");
             if (alert.getReviewAssignedAt() == null) {

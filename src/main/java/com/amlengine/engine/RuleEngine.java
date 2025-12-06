@@ -32,11 +32,13 @@ public class RuleEngine {
         String ruleName = rule.getRuleName();
         String ruleDescription = rule.getRuleDescription();
         RuleFrequency frequency = rule.getFrequency();
-        LocalDateTime detectedAt = LocalDateTime.now() ;
+        LocalDateTime detectedAt = tx.getTransactedAt();  // 단순화: 거래시각 = 탐지시각
         RiskLevel riskLevel = rule.getRiskLevel();
         AlertStatus status = AlertStatus.PENDING;
         String reviewer = null;
         LocalDateTime reviewAssignedAt = null ;
+        
+        
         
         alert.setAlertId(alertId);
         alert.setMainTxId(mainTxId);
@@ -50,6 +52,11 @@ public class RuleEngine {
         alert.setStatus(status);
         alert.setReviewer(reviewer);
         alert.setReviewAssignedAt(reviewAssignedAt);
+        alert.setUid(tx.getUid());
+        alert.setAmountKrw(tx.getAmountKrw());
+        alert.setType(tx.getType().name());      // enum이면 .name()
+        alert.setCountryCode(tx.getCountryCode());
+        alert.setAssetSymbol(tx.getAssetSymbol());
         
         return alert ; 
         

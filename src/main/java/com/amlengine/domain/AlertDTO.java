@@ -17,7 +17,36 @@ public class AlertDTO {
     private AlertStatus status;
     private String reviewer;
     private LocalDateTime reviewAssignedAt;
+    private long uid;
+    private String assetSymbol;
+    private long amountKrw;
+    private String type;        
+    private String countryCode; 
     
+    public long getUid() {
+        return uid;
+    }
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+    public long getAmountKrw() {
+        return amountKrw;
+    }
+    public void setAmountKrw(long amountKrw) {
+        this.amountKrw = amountKrw;
+    }
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public String getCountryCode() {
+        return countryCode;
+    }
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
     public String getAlertId() {
         return alertId;
     }
@@ -89,6 +118,13 @@ public class AlertDTO {
     }
     public void setReviewAssignedAt(LocalDateTime reviewAssignedAt) {
         this.reviewAssignedAt = reviewAssignedAt;
+    }
+    
+    public String getAssetSymbol() {
+        return assetSymbol;
+    }
+    public void setAssetSymbol(String assetSymbol) {
+        this.assetSymbol = assetSymbol;
     }
     
 }

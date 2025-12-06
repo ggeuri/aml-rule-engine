@@ -87,8 +87,7 @@ public class AppMain {
         String json = exporter.toJson(alerts);
         System.out.println(json);
 
-        Path outputPath = Paths.get("/Users/rimu/Projects/MyProjects/csvTest/alerts_boundary.json");
-
+        Path outputPath = Paths.get("/Users/rimu/Projects/MyProjects/aml-rule-engine/dashboard/alerts_boundary.json");
         exporter.exportToFile(alerts, outputPath);
         
 

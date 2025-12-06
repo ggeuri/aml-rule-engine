@@ -12,14 +12,22 @@
         width: 100vw;
         background-color: white;
     }
-
-
     
     h1{
     padding-left: 10px;
+    border-bottom: 1px solid #ddd;
     }
 
-    
+    .filters{
+      padding-bottom: 0px;
+      margin: 8px 0 12px;
+      font-size: 13px;    
+    }
+
+    .filters select {
+      font-size: 13px;
+    }
+
     .content{
         display: flex;
         flex: 1;
@@ -33,7 +41,9 @@
     }
     .list h2{
         padding-top: 10px;
-        border-top: 1px solid #ddd;}
+        /* border-top: 1px solid #ddd; */
+      }
+
     
     table {width: 100%; border-collapse: collapse; font-size: 13px; border: 1px;}
     th, td { border-bottom: 1px solid #000000; padding: 6px 8px; }
@@ -63,11 +73,56 @@
       <div class="content">
           <div class="list">
           <h1>AML Alert Dashboard</h1>
+
+          <div class="filters">
+              <label>
+                Risk:
+                <select id="risk-filter">
+                  <option value="ALL">ALL</option>
+                  <option value="HIGH">HIGH</option>
+                  <option value="MEDIUM">MEDIUM</option>
+                  <option value="LOW">LOW</option>
+                </select>
+              </label>
+
+              <label style="margin-left:16px;">
+                Status:
+                <select id="status-filter">
+                  <option value="ALL">ALL</option>
+                  <option value="ASSIGNED">ASSIGNED</option>
+                  <option value="PENDING">PENDING</option>
+                  <option value="CLOSED">CLOSED</option>
+                </select>
+              </label>
+
+              <label style="margin-left:16px;">
+                Rule:
+                <select id="rule-filter">
+                  <option value="ALL">ALL</option>
+                  <option value="IO-002">IO-002</option>
+                  <option value="IO-003">IO-003</option>
+                  <option value="CU-001">CU-001</option>
+                </select>
+              </label>
+
+              <label style="margin-left:16px;">
+                UID:
+                <input type="text" id="uid-filter" style="width:80px;">
+              </label>
+
+              <label style="margin-left:16px;">
+                Reviewer:
+                <input type="text" id="reviewer-filter" style="width:80px;">
+              </label>
+
+          </div>
+
           <h2 class = "summary">Alert List</h2>
 
           <table >
             <thead>
                 <tr>
+                    <th>DetectedAt</th>
                     <th>Rule ID</th>
                     <th>Rule 설명</th>
                     <th>UID</th>
@@ -75,74 +130,71 @@
                     <th>Risk</th>
                     <th>Reviewer</th>
                     <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="alert-table-body">
-            </tbody>
-          </table>
-      </div>
-      <div class="detail" id="alert-detail">
-          <h2>Alert 상세</h2>
+                  </tr>
+                </thead>
+                <tbody id="alert-table-body">
+                </tbody>
+              </table>
+            </div>
+            <div class="detail" id="alert-detail">
+              <h2>Alert 상세</h2>
       </div>
     </div>
   </div>
   <script>
-  const alerts = [
-    {
-      alertId: "IO-003: RapidWithdrawRule:KRWWDR_003",
-      mainTxId: "KRWWDR_003",
-      uid: 1001,
-      ruleId: "IO-003",
-      ruleName: "RapidWithdrawRule",
-      ruleDescription: "단기간 반복 출금 거래 탐지",
-      riskLevel: "MEDIUM",
-      status: "ASSIGNED",
-      reviewer: "analyst1",
-      detectedAt: "2025-01-01T10:09:00",
-      countryCode: "KR",
-      type: "KRW_WITHDRAW",
-      amountKrw: 100000
-    },
-    {
-      alertId: "CU-001: ForeignCountryRule:ETHWDR_SG_001",
-      mainTxId: "ETHWDR_SG_001",
-      uid: 1004,
-      ruleId: "CU-001",
-      ruleName: "ForeignCountryRule",
-      ruleDescription: "해외 국가 코드에서 발생하는 출금 거래 탐지",
-      riskLevel: "HIGH",
-      status: "PENDING",
-      reviewer: null,
-      detectedAt: "2025-01-01T13:00:00",
-      countryCode: "SG",
-      type: "COIN_WITHDRAW",
-      amountKrw: 4500000
-    }
-  ];
+let allAlerts = [];        
+let filteredAlerts = [];   
 
 let tbody = document.getElementById("alert-table-body");
 let detail = document.getElementById("alert-detail");
+let summary = document.querySelector(".summary"); 
 
-alerts.forEach(function(alert, i) {
+let riskFilter = document.getElementById("risk-filter");
+let statusFilter = document.getElementById("status-filter");
+let ruleFilter = document.getElementById("rule-filter");
+let uidFilter = document.getElementById("uid-filter");
+let reviewerFilter = document.getElementById("reviewer-filter");
+
+function renderAlerts() {
+
+  tbody.innerHTML=""; 
+  detail.innerHTML = "<h2>Alert 상세</h2>";
+
+  filteredAlerts.forEach(function(alert, i) {
     let tr = document.createElement("tr");
+    let detectedDate = alert.detectedAt? alert.detectedAt.substring(0, 10) : "";
+    let detectedTime = alert.detectedAt ? alert.detectedAt.replace("T", " ").substring(0, 16)  : "";
+    let amountKrw = alert.amountKrw ?? 0;
+    let assetLabel;
+
+    if (alert.assetSymbol) {
+      assetLabel = alert.assetSymbol;           
+    } else if (alert.type && alert.type.startsWith("KRW_")) {
+      assetLabel = "KRW";                      
+    } else {
+      assetLabel = "-";                         
+    }
 
     tr.innerHTML = `
+    <td>${detectedDate}</td>  
     <td>${alert.ruleId}</td>  
     <td>${alert.ruleDescription}</td>  
     <td>${alert.uid}</td>  
-    <td>${alert.amountKrw.toLocaleString()}</td>  
+    <td>${amountKrw.toLocaleString()}</td>  
     <td class = "risk-${alert.riskLevel}">${alert.riskLevel}</td>  
     <td>${alert.reviewer ? alert.reviewer : '미배정'}</td>
     <td>${alert.status}</td>  
     ` ;
 
+
     tr.onclick = function() {
         detail.innerHTML = `
         <h2>${alert.ruleId} : ${alert.ruleDescription}</h2>
-        <p><b>detectedAt</b> : ${alert.detectedAt}</p>
+        <p><b>detectedAt</b> : ${detectedTime}</p>
         <p><b>UID</b> : ${alert.uid}</p>
+        <p><b>Asset</b> : ${assetLabel}</p> 
         <p><b>Type</b> : ${alert.type}</p>
-        <p><b>amountKrw</b> : ${alert.amountKrw.toLocaleString()}</p>
+        <p><b>amountKrw</b> : ${amountKrw.toLocaleString()}</p>
         <p><b>status</b> : ${alert.status}</p>
         <p><b>Reviewer</b> : ${alert.reviewer ? alert.reviewer : '미배정'}</p>
         <p><b>TxId</b> : ${alert.mainTxId}</p>
@@ -156,15 +208,76 @@ tbody.appendChild(tr);
 
   if (i === 0) {
       tr.click();
+    }  
+  });
+
+  let openCount = filteredAlerts.filter(a => a.status!="CLOSED").length;
+  summary.innerHTML = `총 Alert 건수 : ${filteredAlerts.length}건 | 미처리건수 : ${openCount}건` ; 
+}
+
+function applyFilters() {
+  let risk = riskFilter.value;
+  let status = statusFilter.value;
+  let rule = ruleFilter.value;
+  let uid = uidFilter.value; 
+  let reviewer = reviewerFilter.value;
+  let result = []; 
+
+  for (let i = 0; i < allAlerts.length; i++) {
+    let alert = allAlerts[i];
+    let ok = true;
+
+    if (risk !== "ALL" && alert.riskLevel !== risk) {
+      ok = false;
     }
 
+    if (status !== "ALL" && alert.status !== status) {
+      ok = false;
+    }
+
+    if (rule !== "ALL" && alert.ruleId !== rule) {
+      ok = false;
+    }
+
+    if (uid !== "") {
+      if(!String(alert.uid).includes(uid))
+      ok = false;
+    }
+
+    if (reviewer !== "") {
+      let reviewerLabel = alert.reviewer ? alert.reviewer : "미배정";
+      if (!reviewerLabel.includes(reviewer)) {
+      ok = false;
+      }
+    } 
+
+    if (ok) {
+      result.push(alert);
+    }
+  }
+
+  filteredAlerts = result;
+  renderAlerts();
+}
+
+riskFilter.addEventListener("change", applyFilters);
+statusFilter.addEventListener("change", applyFilters);
+ruleFilter.addEventListener("change", applyFilters);
+uidFilter.addEventListener("input", applyFilters);
+reviewerFilter.addEventListener("input", applyFilters);
+
+fetch("alerts_boundary.json")
+.then(function(response){
+  return response.json();
+})
+.then(function(data){
+  allAlerts = data;
+  filteredAlerts = data;   // 처음엔 전체 보여주기
+  applyFilters();        
+})
+.catch(function(e){
+  console.error("JSON로드실패",e); 
 });
-
-let summary = document.querySelector(".summary"); 
-let openCount = alerts.filter(a => a.status!="CLOSED").length;
-summary.innerHTML = `총 Alert 건수 : ${alerts.length}건 | 미처리건수 : ${openCount}건` ; 
-
-
 
 
 </script>
