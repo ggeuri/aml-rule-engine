@@ -12,6 +12,8 @@ import main.java.com.amlengine.domain.AlertStatus;
 import main.java.com.amlengine.domain.RiskLevel;
 import main.java.com.amlengine.domain.TransactionDTO;
 import main.java.com.amlengine.engine.RuleEngine;
+import main.java.com.amlengine.generator.GeneratorConfig;
+import main.java.com.amlengine.generator.TransactionGenerator;
 import main.java.com.amlengine.io.AlertJsonExporter;
 import main.java.com.amlengine.io.CsvTransactionLoader;
 import main.java.com.amlengine.rule.Rule;
@@ -89,7 +91,25 @@ public class AppMain {
 
         Path outputPath = Paths.get("/Users/rimu/Projects/MyProjects/aml-rule-engine/dashboard/alerts_boundary.json");
         exporter.exportToFile(alerts, outputPath);
-        
+
+        GeneratorConfig config = new GeneratorConfig();
+        config.setUserCount(3);
+        config.setTxPerUser(5);
+
+        TransactionGenerator generator = new TransactionGenerator();
+        List<TransactionDTO> sample = generator.generate(config);
+
+        for (TransactionDTO tx : sample) {
+            System.out.println(tx.getUid() + " | "
+                    + tx.getType() + " | "
+                    + tx.getAssetSymbol() + " | "
+                    + tx.getQuotePriceKrw() + " | "
+                    + tx.getAssetQuantity() + " | "
+                    + tx.getAmountKrw() + " | "
+                    + tx.getCountryCode() + " | "
+                    + tx.getIpAddress() + " | "
+                    + tx.getTxId());
+        }
 
     }
 }
