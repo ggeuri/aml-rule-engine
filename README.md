@@ -54,6 +54,10 @@
 현재 프로젝트 구조는 다음과 같습니다.
 
 ```text
+dashboard/
+ ├ alert-dashboard.html
+ └ alerts_boundary.json
+
 src/
  └ main/
     └ java/
@@ -100,8 +104,7 @@ src/
                 └ AlertStatsService.java
 
 resources/
- └ .gitkeep   // (대시보드 HTML/JSON 등 정적 파일 위치 예정)
-
+ └ .gitkeep   // (추후 설정/샘플 CSV 등 정적 파일 위치 예정)
 
 ⸻
 
@@ -152,8 +155,8 @@ Validation 규칙 요약 (CsvTransactionLoader.isValid 기준)
 	•	공통 필수: uid, transactedAt, type, amountKrw, txId
 	•	KRW 입출금 (KRW_DEPOSIT, KRW_WITHDRAW)
 	•	amountKrw 필수
-	•	코인 관련 필드(assetSymbol, assetQuantity, quotePriceKrw) 반드시 null
-	•	fromAddress, toAddress 반드시 null
+	•	코인 관련 필드(assetSymbol, assetQuantity, quotePriceKrw)는 반드시 null
+	•	fromAddress, toAddress도 반드시 null
 	•	COIN / TRADE (COIN_*, TRADE_*)
 	•	assetSymbol, assetQuantity, quotePriceKrw 필수
 	•	COIN IO (COIN_DEPOSIT, COIN_WITHDRAW): fromAddress, toAddress 필수
@@ -163,7 +166,7 @@ amountKrw 계산 규칙 (CsvTransactionLoader.calculateRawAmountKrw)
 	•	KRW 계열: CSV의 amount_krw를 그대로 사용
 	•	COIN / TRADE:
 	•	quotePriceKrw × assetQuantity
-	•	BigDecimal 로 계산 후 HALF_UP 기준 0자리까지 반올림 → long 변환
+	•	BigDecimal로 계산 후 HALF_UP 기준 0자리까지 반올림 → long 변환
 
 ⸻
 
@@ -226,8 +229,8 @@ public enum RuleFrequency {
     DAILY
 }
 
-v1.3에서는 PENDING → ASSIGNED까지 사용
-IN_REVIEW, CLOSED는 v2에서 Action Log/Workflow와 연계 예정
+	•	v1.3에서는 PENDING → ASSIGNED까지 사용
+	•	IN_REVIEW, CLOSED는 v2에서 Action Log/Workflow와 연계 예정
 
 ⸻
 
@@ -273,8 +276,7 @@ public interface Rule {
 (windowMinutes, count)
 
 5-4. 구현 룰 3종 (com.amlengine.rule.impl)
-	•	IO002HighAmountAfterDepositRule
-	•	입금 직후 고액 출금
+	•	IO002HighAmountAfterDepositRule – 입금 직후 고액 출금
 	•	조건(개략)
 	•	동일 uid
 	•	windowMinutes 내 입금 합계 = sumDeposit
@@ -283,14 +285,12 @@ public interface Rule {
 	•	sumWithdraw ≥ absoluteThresholdKrw
 	•	sumWithdraw / sumDeposit ≥ percentThreshold
 	•	RiskLevel: HIGH, Frequency: DAILY
-	•	IO003RapidWithdrawRule
-	•	단기간 반복 출금
+	•	IO003RapidWithdrawRule – 단기간 반복 출금
 	•	조건(개략)
 	•	동일 uid
 	•	최근 windowMinutes 동안 출금 거래 건수 ≥ count
 	•	RiskLevel: MEDIUM, Frequency: HOURLY
-	•	Cu001ForeignCountryRule
-	•	해외 국가 코드 출금
+	•	Cu001ForeignCountryRule – 해외 국가 코드 출금
 	•	조건
 	•	출금 거래 (KRW_WITHDRAW, COIN_WITHDRAW)
 	•	countryCode != "KR"
@@ -361,7 +361,7 @@ public int assignRoundRobin(List<AlertDTO> alerts,
 }
 
 	•	PENDING → ASSIGNED 상태 전환 담당
-	•	나중에 weight 기반/우선순위 기반 Assignment로 확장 가능
+	•	나중에 weight 기반 / 우선순위 기반 Assignment로 확장 가능
 
 7-2. AlertStatsService (com.amlengine.stats)
 
@@ -376,14 +376,16 @@ public class AlertStatsService {
     public Map<String, Long> countByReviewer(List<AlertDTO> alerts) { ... }
 }
 
-	•	룰/위험도/상태/담당자 기준 Alert 분포 확인
+	•	룰 / 위험도 / 상태 / 담당자 기준 Alert 분포 확인
 	•	reviewer == null 인 Alert는 담당자 통계에서 제외
 
 ⸻
 
 8. Dashboard (정적 UI)
+	•	위치: dashboard/alert-dashboard.html + dashboard/alerts_boundary.json
 	•	AlertJsonExporter가 생성하는 파일: alerts_boundary.json
-	•	정적 HTML 대시보드(alert-dashboard.html)에서 fetch("alerts_boundary.json")로 로딩
+	•	정적 HTML 대시보드(dashboard/alert-dashboard.html)에서
+fetch("alerts_boundary.json")로 로딩
 
 8-1. 필터
 	•	Risk: ALL / HIGH / MEDIUM / LOW
@@ -425,8 +427,7 @@ from_address,
 to_address,
 tx_id
 
-	•	파싱: line.split(",", -1)
-→ trailing empty column 유지
+	•	파싱: line.split(",", -1) → trailing empty column 유지
 	•	빈 문자열은 이후 단계에서 null 또는 "UNKNOWN"으로 변환
 
 ⸻
@@ -479,12 +480,12 @@ public class AppMain {
 
         // 6) JSON Export
         AlertJsonExporter exporter = new AlertJsonExporter();
-        exporter.exportToFile(alerts, Path.of("resources/alerts_boundary.json"));
+        exporter.exportToFile(alerts, Path.of("dashboard/alerts_boundary.json"));
     }
 }
 
 실제 CSV 경로 / JSON 경로는 현재 프로젝트에서 사용 중인 위치와 맞춰주면 됩니다.
-(위 예시는 resources/alerts_boundary.json 기준.)
+(위 예시는 dashboard/alerts_boundary.json 기준.)
 
 ⸻
 
