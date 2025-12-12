@@ -3,6 +3,7 @@ package main.java.com.amlengine.app;
 import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,9 @@ import main.java.com.amlengine.rule.impl.IO003RapidWithdrawRule;
 import main.java.com.amlengine.stats.AlertStatsService;
 
 public class AppMain {
+    private static final boolean USE_GENERATOR = true;   
     public static void main(String[] args) {
+        
         System.out.println("start");
 
         List<Rule> rules = List.of(
@@ -37,13 +40,44 @@ public class AppMain {
         RuleEngine engine = new RuleEngine(rules);
         // Rule rule = new Cu001ForeignCountryRule();
 
-        List<TransactionDTO> txList = CsvTransactionLoader
-                .load("/Users/rimu/Projects/MyProjects/csvTest/tx_boundary_cases.csv");
+List<TransactionDTO> txList;
+
+        if (USE_GENERATOR) {
+            GeneratorConfig config = new GeneratorConfig();
+            config.setUserCount(50); 
+            config.setTxPerUser(20); 
+            config.setStartAt(LocalDateTime.of(2025, 1, 3, 9, 0)); 
+            config.setDurationMinutes(60 * 8); 
+
+            TransactionGenerator generator = new TransactionGenerator();
+            txList = generator.generate(config);
+
+            System.out.println("\n[Generator] 생성된 거래 수 = " + txList.size());
+
+            txList.stream().limit(10).forEach(tx -> {
+                System.out.printf("%d | %s | %s | %s | %s | %d | %s | %s | %s%n",
+                        tx.getUid(),
+                        tx.getType(),
+                        tx.getAssetSymbol(),
+                        tx.getQuotePriceKrw(),
+                        tx.getAssetQuantity(),
+                        tx.getAmountKrw(),
+                        tx.getCountryCode(),
+                        tx.getIpAddress(),
+                        tx.getTxId()
+                );
+            });
+
+        } else {
+            txList = CsvTransactionLoader
+                    .load("/Users/rimu/Projects/MyProjects/csvTest/tx_boundary_cases.csv");
+        }
+
         List<AlertDTO> alerts = engine.run(txList);
         AlertAssignmentService assign = new AlertAssignmentService();
         List<String> reviewers = List.of("analyst1", "analyst2", "analyst3", "analyst4");
 
-        int nextIndex = assign.assignRoundRobin(alerts, reviewers, 0);
+        assign.assignRoundRobin(alerts, reviewers, 0);
         AlertStatsService stats = new AlertStatsService();
 
         Map<String, Long> byRule = stats.countByRule(alerts);
@@ -89,27 +123,9 @@ public class AppMain {
         String json = exporter.toJson(alerts);
         System.out.println(json);
 
-        Path outputPath = Paths.get("/Users/rimu/Projects/MyProjects/aml-rule-engine/dashboard/alerts_boundary.json");
+        Path outputPath = Paths.get("dashboard/alerts_boundary.json");
         exporter.exportToFile(alerts, outputPath);
 
-        GeneratorConfig config = new GeneratorConfig();
-        config.setUserCount(3);
-        config.setTxPerUser(5);
-
-        TransactionGenerator generator = new TransactionGenerator();
-        List<TransactionDTO> sample = generator.generate(config);
-
-        for (TransactionDTO tx : sample) {
-            System.out.println(tx.getUid() + " | "
-                    + tx.getType() + " | "
-                    + tx.getAssetSymbol() + " | "
-                    + tx.getQuotePriceKrw() + " | "
-                    + tx.getAssetQuantity() + " | "
-                    + tx.getAmountKrw() + " | "
-                    + tx.getCountryCode() + " | "
-                    + tx.getIpAddress() + " | "
-                    + tx.getTxId());
-        }
 
     }
 }
