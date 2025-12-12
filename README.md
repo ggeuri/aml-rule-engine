@@ -507,8 +507,3 @@ public class AppMain {
 	•	uid별 Sliding Window 캐시, Daily Suppression 등
 
 ⸻
-
-13. 포트폴리오용 한 줄 요약
-
-“실제 AML 업무 플로우(거래 → 룰 → Alert → 자동 배정 → 대시보드)를
-com.amlengine 패키지 아래에서 end-to-end로 구현한 Java 기반 AML Rule Engine 프로젝트”
