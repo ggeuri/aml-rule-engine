@@ -1,4 +1,4 @@
-package main.java.com.amlengine.engine;
+package com.amlengine.engine;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,12 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import main.java.com.amlengine.domain.AlertDTO;
-import main.java.com.amlengine.domain.AlertStatus;
-import main.java.com.amlengine.domain.RiskLevel;
-import main.java.com.amlengine.domain.RuleFrequency;
-import main.java.com.amlengine.domain.TransactionDTO;
-import main.java.com.amlengine.rule.Rule;
+import com.amlengine.domain.AlertDTO;
+import com.amlengine.domain.AlertStatus;
+import com.amlengine.domain.RiskLevel;
+import com.amlengine.domain.RuleFrequency;
+import com.amlengine.domain.TransactionDTO;
+import com.amlengine.rule.Rule;
 
 public class RuleEngine {
     private final List<Rule> rules ;
@@ -54,7 +54,7 @@ public class RuleEngine {
         alert.setReviewAssignedAt(reviewAssignedAt);
         alert.setUid(tx.getUid());
         alert.setAmountKrw(tx.getAmountKrw());
-        alert.setType(tx.getType().name());      // enum이면 .name()
+        alert.setTxType(tx.getTxType().name());      // enum이면 .name()
         alert.setCountryCode(tx.getCountryCode());
         alert.setAssetSymbol(tx.getAssetSymbol());
         

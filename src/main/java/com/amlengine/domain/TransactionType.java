@@ -1,4 +1,4 @@
-package main.java.com.amlengine.domain;
+package com.amlengine.domain;
 
 public enum TransactionType {
     KRW_DEPOSIT,

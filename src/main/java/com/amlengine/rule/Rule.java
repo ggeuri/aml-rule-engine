@@ -1,10 +1,10 @@
-package main.java.com.amlengine.rule;
+package com.amlengine.rule;
 
 import java.util.List;
 
-import main.java.com.amlengine.domain.RiskLevel;
-import main.java.com.amlengine.domain.RuleFrequency;
-import main.java.com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.RiskLevel;
+import com.amlengine.domain.RuleFrequency;
+import com.amlengine.domain.TransactionDTO;
 
 public interface Rule {
     String getRuleId();

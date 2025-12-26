@@ -1,14 +1,14 @@
-package main.java.com.amlengine.rule.impl;
+package com.amlengine.rule.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import main.java.com.amlengine.domain.RiskLevel;
-import main.java.com.amlengine.domain.RuleFrequency;
-import main.java.com.amlengine.domain.TransactionDTO;
-import main.java.com.amlengine.domain.TxTypeHelper;
-import main.java.com.amlengine.rule.Rule;
-import main.java.com.amlengine.rule.config.RapidWithdrawRuleConfig;
+import com.amlengine.domain.RiskLevel;
+import com.amlengine.domain.RuleFrequency;
+import com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.TxTypeHelper;
+import com.amlengine.rule.Rule;
+import com.amlengine.rule.config.RapidWithdrawRuleConfig;
 
 public class IO003RapidWithdrawRule implements Rule{
     private static final String RULE_ID = "IO-003" ;
@@ -50,7 +50,7 @@ public class IO003RapidWithdrawRule implements Rule{
     @Override
     public boolean match(TransactionDTO tx, List<TransactionDTO> history){
         // 1.	현재 거래가 출금이 아니면 바로 false
-        if(!TxTypeHelper.isWithdraw(tx.getType())) return false;
+        if(!TxTypeHelper.isWithdraw(tx.getTxType())) return false;
         // 2.	현재 거래 시간 now 를 가져온다.
         LocalDateTime now = tx.getTransactedAt();
         // 3.	windowStart = now - windowMinutes
@@ -69,7 +69,7 @@ public class IO003RapidWithdrawRule implements Rule{
             
             // 그 중 출금 거래만 카운트
             if (t.isBefore(windowStart) || t.isAfter(now)) continue; 
-            if(TxTypeHelper.isWithdraw(h.getType()))  withdrawCount++;
+            if(TxTypeHelper.isWithdraw(h.getTxType()))  withdrawCount++;
             
 
             }

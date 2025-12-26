@@ -1,11 +1,11 @@
-package main.java.com.amlengine.domain;
+package com.amlengine.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class TransactionDTO {
     private long uid;
-    private TransactionType type;
+    private TransactionType txType;
     private long amountKrw;
     private LocalDateTime transactedAt;
     
@@ -30,11 +30,11 @@ public class TransactionDTO {
     public void setUid(long uid) {
         this.uid = uid;
     }
-    public TransactionType getType() {
-        return type;
+    public TransactionType getTxType() {
+        return txType;
     }
-    public void setType(TransactionType type) {
-        this.type = type;
+    public void setType(TransactionType txType) {
+        this.txType = txType;
     }
     public long getAmountKrw() {
         return amountKrw;

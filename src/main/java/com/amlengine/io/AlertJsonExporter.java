@@ -1,4 +1,4 @@
-package main.java.com.amlengine.io;
+package com.amlengine.io;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -6,7 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import main.java.com.amlengine.domain.AlertDTO;
+import com.amlengine.domain.AlertDTO;
 
 public class AlertJsonExporter {
 
@@ -58,7 +58,7 @@ public class AlertJsonExporter {
             alertJson.append("\"status\":\"").append(alert.getStatus()).append("\",");
             alertJson.append("\"uid\":").append(alert.getUid()).append(",");
             alertJson.append("\"amountKrw\":").append(alert.getAmountKrw()).append(",");
-            alertJson.append("\"type\":\"").append(alert.getType()).append("\",");
+            alertJson.append("\"txType\":\"").append(alert.getTxType()).append("\",");
             alertJson.append("\"countryCode\":\"").append(alert.getCountryCode()).append("\",");
 
             

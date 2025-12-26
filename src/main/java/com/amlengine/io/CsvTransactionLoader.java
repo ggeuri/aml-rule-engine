@@ -1,4 +1,4 @@
-package main.java.com.amlengine.io;
+package com.amlengine.io;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import main.java.com.amlengine.domain.TransactionDTO;
-import main.java.com.amlengine.domain.TransactionType;
+import com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.TransactionType;
 
 public class CsvTransactionLoader {
     
@@ -101,10 +101,10 @@ public static boolean isValid(TransactionDTO tx){
 
         if(tx.getUid() <= 0) return false;
         if(tx.getTransactedAt() == null) return false;
-        if (tx.getType() == null) return false;
+        if (tx.getTxType() == null) return false;
         if (tx.getTxId() == null || tx.getTxId().isBlank()) return false;
 
-        TransactionType type = tx.getType();
+        TransactionType type = tx.getTxType();
         // 원화 validate
         if(type == TransactionType.KRW_DEPOSIT || type == TransactionType.KRW_WITHDRAW){
             // uid, amountKrw, txId 필수 나머지 null assetSymbol/assetQuantity/quotePriceKrw, from/to

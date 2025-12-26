@@ -1,16 +1,16 @@
-package main.java.com.amlengine.rule.impl;
+package com.amlengine.rule.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import main.java.com.amlengine.domain.RiskLevel;
-import main.java.com.amlengine.domain.RuleFrequency;
-import main.java.com.amlengine.domain.TransactionDTO;
-import main.java.com.amlengine.domain.TxTypeHelper;
-import main.java.com.amlengine.rule.Rule;
-import main.java.com.amlengine.rule.config.HighAmountAfterDepositRuleConfig;
+import com.amlengine.domain.RiskLevel;
+import com.amlengine.domain.RuleFrequency;
+import com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.TxTypeHelper;
+import com.amlengine.rule.Rule;
+import com.amlengine.rule.config.HighAmountAfterDepositRuleConfig;
 
 public class IO002HighAmountAfterDepositRule implements Rule{
     private static final String RULE_ID = "IO-002";
@@ -48,7 +48,7 @@ public class IO002HighAmountAfterDepositRule implements Rule{
 
     @Override
     public boolean match(TransactionDTO tx, List<TransactionDTO> history){
-        if(!TxTypeHelper.isWithdraw(tx.getType())) return false;
+        if(!TxTypeHelper.isWithdraw(tx.getTxType())) return false;
         
         long uid = tx.getUid();
         LocalDateTime end = tx.getTransactedAt(); 
@@ -63,11 +63,11 @@ public class IO002HighAmountAfterDepositRule implements Rule{
             LocalDateTime t = h.getTransactedAt();
             if (t.isBefore(start) || t.isAfter(end)) continue; 
             
-            if(TxTypeHelper.isDeposit(h.getType())){
+            if(TxTypeHelper.isDeposit(h.getTxType())){
                 sumDeposit += h.getAmountKrw();
             }
     
-            if(TxTypeHelper.isWithdraw(h.getType())){
+            if(TxTypeHelper.isWithdraw(h.getTxType())){
                     sumWithdraw += h.getAmountKrw();
             }
             

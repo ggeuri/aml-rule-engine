@@ -1,4 +1,4 @@
-package main.java.com.amlengine.rule.config;
+package com.amlengine.rule.config;
 
 import java.math.BigDecimal;
 

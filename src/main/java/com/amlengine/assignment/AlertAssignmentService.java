@@ -1,10 +1,10 @@
-package main.java.com.amlengine.assignment;
+package com.amlengine.assignment;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import main.java.com.amlengine.domain.AlertDTO;
-import main.java.com.amlengine.domain.AlertStatus;
+import com.amlengine.domain.AlertDTO;
+import com.amlengine.domain.AlertStatus;
 
 public class AlertAssignmentService {
 

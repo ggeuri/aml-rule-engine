@@ -1,4 +1,4 @@
-package main.java.com.amlengine.generator;
+package com.amlengine.generator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import main.java.com.amlengine.domain.TransactionDTO;
-import main.java.com.amlengine.domain.TransactionType;
-import main.java.com.amlengine.domain.TxTypeHelper;
+import com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.TransactionType;
+import com.amlengine.domain.TxTypeHelper;
 
 public class TransactionGenerator {
     private final Random random = new Random();

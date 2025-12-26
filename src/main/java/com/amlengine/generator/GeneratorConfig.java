@@ -1,9 +1,9 @@
-package main.java.com.amlengine.generator;
+package com.amlengine.generator;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import main.java.com.amlengine.domain.TransactionType;
+import com.amlengine.domain.TransactionType;
 
 public class GeneratorConfig {
     private int userCount; 

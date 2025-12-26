@@ -1,4 +1,4 @@
-package main.java.com.amlengine.app;
+package com.amlengine.app;
 
 import java.math.BigDecimal;
 import java.nio.file.Path;
@@ -7,23 +7,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import main.java.com.amlengine.assignment.AlertAssignmentService;
-import main.java.com.amlengine.domain.AlertDTO;
-import main.java.com.amlengine.domain.AlertStatus;
-import main.java.com.amlengine.domain.RiskLevel;
-import main.java.com.amlengine.domain.TransactionDTO;
-import main.java.com.amlengine.engine.RuleEngine;
-import main.java.com.amlengine.generator.GeneratorConfig;
-import main.java.com.amlengine.generator.TransactionGenerator;
-import main.java.com.amlengine.io.AlertJsonExporter;
-import main.java.com.amlengine.io.CsvTransactionLoader;
-import main.java.com.amlengine.rule.Rule;
-import main.java.com.amlengine.rule.config.HighAmountAfterDepositRuleConfig;
-import main.java.com.amlengine.rule.config.RapidWithdrawRuleConfig;
-import main.java.com.amlengine.rule.impl.Cu001ForeignCountryRule;
-import main.java.com.amlengine.rule.impl.IO002HighAmountAfterDepositRule;
-import main.java.com.amlengine.rule.impl.IO003RapidWithdrawRule;
-import main.java.com.amlengine.stats.AlertStatsService;
+import com.amlengine.assignment.AlertAssignmentService;
+import com.amlengine.domain.AlertDTO;
+import com.amlengine.domain.AlertStatus;
+import com.amlengine.domain.RiskLevel;
+import com.amlengine.domain.TransactionDTO;
+import com.amlengine.engine.RuleEngine;
+import com.amlengine.generator.GeneratorConfig;
+import com.amlengine.generator.TransactionGenerator;
+import com.amlengine.io.AlertJsonExporter;
+import com.amlengine.io.CsvTransactionLoader;
+import com.amlengine.rule.Rule;
+import com.amlengine.rule.config.HighAmountAfterDepositRuleConfig;
+import com.amlengine.rule.config.RapidWithdrawRuleConfig;
+import com.amlengine.rule.impl.Cu001ForeignCountryRule;
+import com.amlengine.rule.impl.IO002HighAmountAfterDepositRule;
+import com.amlengine.rule.impl.IO003RapidWithdrawRule;
+import com.amlengine.stats.AlertStatsService;
 
 public class AppMain {
     private static final boolean USE_GENERATOR = true;   
@@ -57,7 +57,7 @@ List<TransactionDTO> txList;
             txList.stream().limit(10).forEach(tx -> {
                 System.out.printf("%d | %s | %s | %s | %s | %d | %s | %s | %s%n",
                         tx.getUid(),
-                        tx.getType(),
+                        tx.getTxType(),
                         tx.getAssetSymbol(),
                         tx.getQuotePriceKrw(),
                         tx.getAssetQuantity(),

@@ -1,12 +1,12 @@
-package main.java.com.amlengine.rule.impl;
+package com.amlengine.rule.impl;
 
 import java.util.List;
 
-import main.java.com.amlengine.domain.RiskLevel;
-import main.java.com.amlengine.domain.RuleFrequency;
-import main.java.com.amlengine.domain.TransactionDTO;
-import main.java.com.amlengine.domain.TxTypeHelper;
-import main.java.com.amlengine.rule.Rule;
+import com.amlengine.domain.RiskLevel;
+import com.amlengine.domain.RuleFrequency;
+import com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.TxTypeHelper;
+import com.amlengine.rule.Rule;
 
 public class Cu001ForeignCountryRule implements Rule{
 
@@ -40,7 +40,7 @@ public class Cu001ForeignCountryRule implements Rule{
 
     @Override
     public boolean match(TransactionDTO tx, List<TransactionDTO> history){
-        if(!TxTypeHelper.isWithdraw(tx.getType())) return false;
+        if(!TxTypeHelper.isWithdraw(tx.getTxType())) return false;
         
         String code = tx.getCountryCode();
         if (code == null || code.isBlank()) return false;  

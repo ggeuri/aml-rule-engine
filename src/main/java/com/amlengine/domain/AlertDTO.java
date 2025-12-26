@@ -1,27 +1,39 @@
-package main.java.com.amlengine.domain;
+package com.amlengine.domain;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class AlertDTO {
-    
-    private String alertId;
-    private String mainTxId;
-    private List<String> relatedTxIds;
+    private Long alertPk;              
+    private String alertId; 
+
+    private String mainTxId;   
+    private List<String> relatedTxIds; 
+
     private String ruleId;
     private String ruleName;
     private String ruleDescription;
     private RuleFrequency frequency;
+
     private LocalDateTime detectedAt;
+    private LocalDate detectedDate; 
+
     private RiskLevel riskLevel;
     private AlertStatus status;
-    private String reviewer;
+
+    private String reviewer;        
     private LocalDateTime reviewAssignedAt;
+
     private long uid;
     private String assetSymbol;
     private long amountKrw;
-    private String type;        
-    private String countryCode; 
+    private String txType;       
+    private String countryCode;
+
+    private LocalDateTime createdAt;   
+    private LocalDateTime updatedAt;   
+
     
     public long getUid() {
         return uid;
@@ -35,11 +47,11 @@ public class AlertDTO {
     public void setAmountKrw(long amountKrw) {
         this.amountKrw = amountKrw;
     }
-    public String getType() {
-        return type;
+    public String getTxType() {
+        return txType;
     }
-    public void setType(String type) {
-        this.type = type;
+    public void setTxType(String txType) {
+        this.txType = txType;
     }
     public String getCountryCode() {
         return countryCode;
@@ -125,6 +137,30 @@ public class AlertDTO {
     }
     public void setAssetSymbol(String assetSymbol) {
         this.assetSymbol = assetSymbol;
+    }
+    public Long getAlertPk() {
+        return alertPk;
+    }
+    public void setAlertPk(Long alertPk) {
+        this.alertPk = alertPk;
+    }
+    public LocalDate getDetectedDate() {
+        return detectedDate;
+    }
+    public void setDetectedDate(LocalDate detectedDate) {
+        this.detectedDate = detectedDate;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
     
 }

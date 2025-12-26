@@ -1,12 +1,12 @@
-package main.java.com.amlengine.stats;
+package com.amlengine.stats;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import main.java.com.amlengine.domain.AlertDTO;
-import main.java.com.amlengine.domain.AlertStatus;
-import main.java.com.amlengine.domain.RiskLevel;
+import com.amlengine.domain.AlertDTO;
+import com.amlengine.domain.AlertStatus;
+import com.amlengine.domain.RiskLevel;
 
 public class AlertStatsService {
 

@@ -1,4 +1,4 @@
-package main.java.com.amlengine.rule.config;
+package com.amlengine.rule.config;
 
 public class RapidWithdrawRuleConfig {
     private final int windowMinutes;
