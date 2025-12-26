@@ -484,8 +484,6 @@ public class AppMain {
     }
 }
 
-실제 CSV 경로 / JSON 경로는 현재 프로젝트에서 사용 중인 위치와 맞춰주면 됩니다.
-(위 예시는 dashboard/alerts_boundary.json 기준.)
 
 ⸻
 
