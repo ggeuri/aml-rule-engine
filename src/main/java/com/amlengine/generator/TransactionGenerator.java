@@ -24,11 +24,11 @@ public class TransactionGenerator {
             long uid = baseUid + i;
 
             for (int j = 0; j < config.getTxPerUser(); j++) {
-                TransactionType type = pickType(config.getTypeRatio());
+                TransactionType txType = pickType(config.getTypeRatio());
 
                 TransactionDTO tx = new TransactionDTO();
                 tx.setUid(uid);
-                tx.setType(type);
+                tx.setTxType(txType);
 
                 tx.setTransactedAt(randomTransactedAt(config));
 
@@ -36,11 +36,11 @@ public class TransactionGenerator {
                 tx.setCountryCode(country);
                 tx.setIpAddress(randomIp(country));
 
-                tx.setTxId(generateTxId(type, uid, j));
+                tx.setTxId(generateTxId(txType, uid, j));
 
-                if (type == TransactionType.KRW_DEPOSIT || type == TransactionType.KRW_WITHDRAW) {
+                if (txType == TransactionType.KRW_DEPOSIT || txType == TransactionType.KRW_WITHDRAW) {
                     // KRW 전용: amountKrw만, 나머지는 null
-                    long amount = randomKrwAmount(type);
+                    long amount = randomKrwAmount(txType);
                     tx.setAmountKrw(amount);
                     tx.setAssetSymbol(null);
                     tx.setAssetQuantity(null);
@@ -62,7 +62,7 @@ public class TransactionGenerator {
                     tx.setAmountKrw(amountKrw);
 
                     // 코인 입출고면 주소도 세팅
-                    if (type == TransactionType.COIN_DEPOSIT || type == TransactionType.COIN_WITHDRAW) {
+                    if (txType == TransactionType.COIN_DEPOSIT || txType == TransactionType.COIN_WITHDRAW) {
                         tx.setFromAddress(randomAddress());
                         tx.setToAddress(randomAddress());
                     } else {
@@ -143,13 +143,13 @@ public class TransactionGenerator {
         return a + "." + b + "." + c + "." + d;
     }
 
-    private long randomKrwAmount(TransactionType type) {
+    private long randomKrwAmount(TransactionType txType) {
 
         double p = random.nextDouble();
         long min;
         long max;
 
-        if (TxTypeHelper.isDeposit(type)) {
+        if (TxTypeHelper.isDeposit(txType)) {
             if (p < 0.70) {
                 min = 1_000L;
                 max = 3_000_000L;
@@ -164,7 +164,7 @@ public class TransactionGenerator {
                 max = 30_000_000_000L;
             }
 
-        } else if (TxTypeHelper.isWithdraw(type)) {
+        } else if (TxTypeHelper.isWithdraw(txType)) {
             if (p < 0.50) {
                 min = 10_000L;
                 max = 3_000_000L;
@@ -234,9 +234,9 @@ public class TransactionGenerator {
         }
     }
 
-    private String generateTxId(TransactionType type, long uid, int seq) {
+    private String generateTxId(TransactionType txType, long uid, int seq) {
         String prefix;
-        switch (type) {
+        switch (txType) {
             case KRW_DEPOSIT:
                 prefix = "KD";
                 break;

@@ -9,9 +9,9 @@ import java.util.Map;
 
 import com.amlengine.assignment.AlertAssignmentService;
 import com.amlengine.domain.AlertDTO;
-import com.amlengine.domain.AlertStatus;
-import com.amlengine.domain.RiskLevel;
 import com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.enums.AlertStatus;
+import com.amlengine.domain.enums.RiskLevel;
 import com.amlengine.engine.RuleEngine;
 import com.amlengine.generator.GeneratorConfig;
 import com.amlengine.generator.TransactionGenerator;

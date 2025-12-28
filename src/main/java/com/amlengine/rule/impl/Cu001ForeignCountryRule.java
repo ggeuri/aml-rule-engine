@@ -2,10 +2,10 @@ package com.amlengine.rule.impl;
 
 import java.util.List;
 
-import com.amlengine.domain.RiskLevel;
-import com.amlengine.domain.RuleFrequency;
 import com.amlengine.domain.TransactionDTO;
 import com.amlengine.domain.TxTypeHelper;
+import com.amlengine.domain.enums.RiskLevel;
+import com.amlengine.domain.enums.RuleFrequency;
 import com.amlengine.rule.Rule;
 
 public class Cu001ForeignCountryRule implements Rule{

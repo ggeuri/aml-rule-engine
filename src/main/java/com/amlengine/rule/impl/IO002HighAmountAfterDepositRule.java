@@ -5,10 +5,10 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.amlengine.domain.RiskLevel;
-import com.amlengine.domain.RuleFrequency;
 import com.amlengine.domain.TransactionDTO;
 import com.amlengine.domain.TxTypeHelper;
+import com.amlengine.domain.enums.RiskLevel;
+import com.amlengine.domain.enums.RuleFrequency;
 import com.amlengine.rule.Rule;
 import com.amlengine.rule.config.HighAmountAfterDepositRuleConfig;
 

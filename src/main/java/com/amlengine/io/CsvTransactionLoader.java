@@ -32,7 +32,7 @@ public class CsvTransactionLoader {
                 try {
                     long uid = Long.parseLong(splitTx[0]) ;
                     LocalDateTime transactedAt = LocalDateTime.parse(splitTx[1].trim(),dtf) ;
-                    TransactionType type = TransactionType.valueOf(splitTx[2]) ;
+                    TransactionType txType = TransactionType.valueOf(splitTx[2]) ;
                     String assetSymbol = splitTx[3].isBlank() ? null : splitTx[3];
                     BigDecimal assetQuantity = splitTx[4].isBlank() ? null : new BigDecimal(splitTx[4].trim()); 
                     BigDecimal quotePriceKrw = splitTx[5].isBlank() ? null : new BigDecimal(splitTx[5].trim()); 
@@ -47,7 +47,7 @@ public class CsvTransactionLoader {
 
                     txDto.setUid(uid);
                     txDto.setTransactedAt(transactedAt);
-                    txDto.setType(type);
+                    txDto.setTxType(txType);
                     txDto.setAssetSymbol(assetSymbol);
                     txDto.setAssetQuantity(assetQuantity);
                     txDto.setQuotePriceKrw(quotePriceKrw);
@@ -57,7 +57,7 @@ public class CsvTransactionLoader {
                     txDto.setToAddress(toAddress);
                     txDto.setTxId(txId);
                     
-                    long finalAmountKrw = calculateRawAmountKrw(type,assetQuantity,quotePriceKrw,amountKrw);
+                    long finalAmountKrw = calculateRawAmountKrw(txType,assetQuantity,quotePriceKrw,amountKrw);
                     txDto.setAmountKrw(finalAmountKrw);
 
                     if (!isValid(txDto)) {
@@ -82,13 +82,13 @@ public class CsvTransactionLoader {
           
     return txList; }
 
-public static long calculateRawAmountKrw(TransactionType type, BigDecimal assetQuantity, BigDecimal quotePriceKrw, long csvAmountKrw) {
-    if(type == TransactionType.KRW_DEPOSIT || type == TransactionType.KRW_WITHDRAW){
+public static long calculateRawAmountKrw(TransactionType txType, BigDecimal assetQuantity, BigDecimal quotePriceKrw, long csvAmountKrw) {
+    if(txType == TransactionType.KRW_DEPOSIT || txType == TransactionType.KRW_WITHDRAW){
         return csvAmountKrw; 
     } 
     
     if(assetQuantity == null || quotePriceKrw == null ){
-        throw new IllegalArgumentException("필수값(assetQuantity/quotePriceKrw) 누락. s거래타입: " + type);}
+        throw new IllegalArgumentException("필수값(assetQuantity/quotePriceKrw) 누락. s거래타입: " + txType);}
     
     // 매수 매도도? 주식이어도 어차피 수량*가격이니까?
     BigDecimal amountKrw = quotePriceKrw.multiply(assetQuantity);
@@ -104,9 +104,9 @@ public static boolean isValid(TransactionDTO tx){
         if (tx.getTxType() == null) return false;
         if (tx.getTxId() == null || tx.getTxId().isBlank()) return false;
 
-        TransactionType type = tx.getTxType();
+        TransactionType txType = tx.getTxType();
         // 원화 validate
-        if(type == TransactionType.KRW_DEPOSIT || type == TransactionType.KRW_WITHDRAW){
+        if(txType == TransactionType.KRW_DEPOSIT || txType == TransactionType.KRW_WITHDRAW){
             // uid, amountKrw, txId 필수 나머지 null assetSymbol/assetQuantity/quotePriceKrw, from/to
             if(tx.getAssetSymbol() != null) return false; 
             if(tx.getAssetQuantity() != null) return false; 
@@ -119,8 +119,8 @@ public static boolean isValid(TransactionDTO tx){
         }
 
         // 코인 validate
-        if(type == TransactionType.COIN_DEPOSIT ||  type == TransactionType.COIN_WITHDRAW
-            ||type == TransactionType.TRADE_BUY || type == TransactionType.TRADE_SELL ){
+        if(txType == TransactionType.COIN_DEPOSIT ||  txType == TransactionType.COIN_WITHDRAW
+            ||txType == TransactionType.TRADE_BUY || txType == TransactionType.TRADE_SELL ){
                 //  assetSymbol, assetQuantity, quotePriceKrw, from/to ||assetSymbol, assetQuantity, quotePriceKrw
                 if(tx.getAssetSymbol() == null) return false; 
                 if(tx.getAssetQuantity() == null) return false; 
@@ -131,13 +131,13 @@ public static boolean isValid(TransactionDTO tx){
             }
             
         // 입출고 validate
-        if(type == TransactionType.COIN_DEPOSIT ||  type == TransactionType.COIN_WITHDRAW){
+        if(txType == TransactionType.COIN_DEPOSIT ||  txType == TransactionType.COIN_WITHDRAW){
              if(tx.getFromAddress() == null) return false; 
              if(tx.getToAddress() == null) return false; 
         }
 
         // 매수매도 
-        if(type == TransactionType.TRADE_BUY || type == TransactionType.TRADE_SELL ){
+        if(txType == TransactionType.TRADE_BUY || txType == TransactionType.TRADE_SELL ){
             if(tx.getFromAddress() != null) return false; 
              if(tx.getToAddress() != null) return false; 
 

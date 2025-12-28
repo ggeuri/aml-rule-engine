@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.amlengine.domain.AlertDTO;
-import com.amlengine.domain.AlertStatus;
+import com.amlengine.domain.enums.AlertStatus;
 
 public class AlertAssignmentService {
 

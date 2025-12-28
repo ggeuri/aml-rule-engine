@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.amlengine.domain.AlertDTO;
-import com.amlengine.domain.AlertStatus;
-import com.amlengine.domain.RiskLevel;
-import com.amlengine.domain.RuleFrequency;
 import com.amlengine.domain.TransactionDTO;
+import com.amlengine.domain.enums.AlertStatus;
+import com.amlengine.domain.enums.RiskLevel;
+import com.amlengine.domain.enums.RuleFrequency;
 import com.amlengine.rule.Rule;
 
 public class RuleEngine {
